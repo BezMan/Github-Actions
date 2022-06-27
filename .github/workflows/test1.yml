@@ -41,14 +41,12 @@ jobs:
         with:
           java-version: 11
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
-        with:
-          name: expense-manager.apk
-          path: app/build/outputs/apk/debug/
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+            - name: Build with Gradle
+              run: ./gradlew build
+            - name: Build Debug APK
+              run: ./gradlew assembleDebug
 
 
   notify_success:
