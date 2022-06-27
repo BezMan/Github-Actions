@@ -29,8 +29,7 @@ jobs:
           name: unit_test_report
           path: app/build/reports/tests/testDebugUnitTest/
 
-
-  package:
+  generate_apk:
     name: Generate APK
     runs-on: ubuntu-latest
     steps:
@@ -44,4 +43,12 @@ jobs:
 
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace
+
+  notify_success:
+    needs: [generate_apk]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Success message
+        run: echo GENERATED APK at /app/build/outputs/apk/debug
 
