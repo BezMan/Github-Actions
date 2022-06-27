@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting(name: String) {
     Column {
         Text("Love" +name)
-        Text("Go $name!")
+        Text("Go"+ name)
 
     }
 }
