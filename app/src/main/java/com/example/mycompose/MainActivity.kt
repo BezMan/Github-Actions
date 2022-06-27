@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String) {
     Column {
-        Text("Love $name!")
+        Text("Love" +name)
         Text("Go $name!")
 
     }
