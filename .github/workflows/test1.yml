@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run script file
-        run: app/test.sh
+        run: ./test.sh
         shell: bash
 
 #  lint:
