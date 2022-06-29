@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  run_script:
+  run_script_and_push_changes:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,20 +26,6 @@ jobs:
           git push
 
 
-#  push_commit:
-#    needs: [run_script]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Commit report
-#        run: |
-#          git config user.email "silverbez@gmail.com"
-#          git config user.name "BezMan"
-#          git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/BezMan/Github-Actions
-#          git checkout "${GITHUB_REF:11}"
-#          git add .
-#          git commit -am "Automated report 2"
-#          git push
 #  lint:
 #    runs-on: ubuntu-latest
 #    steps:
