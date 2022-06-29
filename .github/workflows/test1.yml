@@ -1,14 +1,89 @@
-name: My CI
+name: CI Push
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
   workflow_dispatch:
 
 jobs:
 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Run Lint
+        run: ./gradlew lintDebug
+
+      - name: Upload html test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: lint.html
+          path: app/build/reports/lint-results-debug.html
+  unit-test:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Run tests
+        run: ./gradlew test
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit_test_report
+          path: app/build/reports/tests/testDebugUnitTest/
+          cache: gradle
+
+#  instrumentation-test:
+#    needs: [unit-test]
+#    runs-on: macos-latest
+#    steps:
+#      - name: Checkout the code
+#        uses: actions/checkout@v3
+#
+#      - name: set up JDK 11
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: 11
+#
+#      - name: Run espresso tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: 29
+#          script: ./gradlew connectedCheck
+#
+#      - name: Upload test report
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: instrumentation_test_report
+#          path: app/build/reports/androidTests/connected/
+
+  generate-apk:
+#    needs: [instrumentation-test]
+    needs: [unit-test]
+    name: Generate APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-apk.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+
   run_script_and_push_changes:
+    needs: [generate-apk]
+    name: run script and push changes
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -16,7 +91,7 @@ jobs:
         run: ./test.sh
         shell: bash
 
-      - name: Commit report
+      - name: Commit and Push changes
         run: |
           git config user.email "silverbez@gmail.com"
           git config user.name "BezMan"
@@ -24,77 +99,3 @@ jobs:
           git add .
           git commit -am "Automated report 2"
           git push
-
-
-#  lint:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout the code
-#        uses: actions/checkout@v3
-#
-#      - name: Run Lint
-#        run: ./gradlew lintDebug
-#
-#      - name: Upload html test report
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: lint.html
-#          path: app/build/reports/lint-results-debug.html
-#  unit-test:
-#    needs: [lint]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout the code
-#        uses: actions/checkout@v3
-#
-#      - name: Run tests
-#        run: ./gradlew test
-#
-#      - name: Upload test report
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: unit_test_report
-#          path: app/build/reports/tests/testDebugUnitTest/
-#          cache: gradle
-#
-##  instrumentation-test:
-##    needs: [unit-test]
-##    runs-on: macos-latest
-##    steps:
-##      - name: Checkout the code
-##        uses: actions/checkout@v3
-##
-##      - name: set up JDK 11
-##        uses: actions/setup-java@v3
-##        with:
-##          java-version: 11
-##
-##      - name: Run espresso tests
-##        uses: reactivecircus/android-emulator-runner@v2
-##        with:
-##          api-level: 29
-##          script: ./gradlew connectedCheck
-##
-##      - name: Upload test report
-##        uses: actions/upload-artifact@v3
-##        with:
-##          name: instrumentation_test_report
-##          path: app/build/reports/androidTests/connected/
-#
-#  generate-apk:
-##    needs: [instrumentation-test]
-#    needs: [unit-test]
-#    name: Generate APK
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout the code
-#        uses: actions/checkout@v3
-#
-#      - name: Build debug APK
-#        run: ./gradlew assembleDebug --stacktrace
-#
-#      - name: Upload APK
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: app-apk.apk
-#          path: app/build/outputs/apk/debug/app-debug.apk
