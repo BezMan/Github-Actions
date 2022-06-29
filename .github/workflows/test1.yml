@@ -21,7 +21,6 @@ jobs:
     needs: [run_script]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - name: Commit report
         run: |
           git config user.email "silverbez@gmail.com"
