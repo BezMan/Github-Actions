@@ -29,8 +29,8 @@ jobs:
           default_author: github_actions
           message: 'Automated report 1'
 
-      - name: Create report file
-        run: date +%s > report.txt
+#      - name: Create report file
+#        run: date +%s > report.txt
 
       - name: Commit report
         run: |
