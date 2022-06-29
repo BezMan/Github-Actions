@@ -1,8 +1,7 @@
 package com.example.mycompose
 
-import org.junit.Test
-
 import org.junit.Assert.*
+import org.junit.Test
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -24,4 +23,17 @@ class ExampleUnitTest {
 //    fun failing_test() {
 //        fail("on purpose")
 //    }
+
+    @Test
+    fun loop_1000() {
+        for (i in 1..1000) {
+            check_equal(i)
+        }
+    }
+
+    private fun check_equal(i: Int) {
+        assertEquals(i, i)
+    }
+
+
 }
