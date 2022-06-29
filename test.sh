@@ -13,3 +13,5 @@ echo "$(<test.sh)"
 echo '# text hereeeeee' >> test.sh
 echo '# text hereeeeee' >> test.sh
 echo "$(<test.sh)"
+# text hereeeeee
+# text hereeeeee
