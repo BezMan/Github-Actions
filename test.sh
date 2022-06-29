@@ -9,5 +9,7 @@ echo  "--------  Compiling...  --------"
 # cp test.sh test_copy.txt
 # echo "$(<test_copy.txt )"
 
+echo "$(<test.sh)"
 echo '# text hereeeeee' >> test.sh
-# text hereeeeee
+echo '# text hereeeeee' >> test.sh
+echo "$(<test.sh)"
