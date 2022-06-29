@@ -10,3 +10,4 @@ echo  "--------  Compiling...  --------"
 # echo "$(<test_copy.txt )"
 
 echo '# text hereeeeee' >> test.sh
+# text hereeeeee
