@@ -41,18 +41,18 @@ jobs:
           name: app-apk.apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Run script file - unit tests
-        run: ./test.sh
+      - name: Run script file - run unit tests
+        run: ./unitTest.sh
         shell: bash
-
-      - name: Commit and Push changes
-        run: |
-          git config user.email "silverbez@gmail.com"
-          git config user.name "BezMan"
-          git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/BezMan/Github-Actions
-          git add .
-          git commit -am "Automated report 2"
-          git push
+#
+#      - name: Commit and Push changes
+#        run: |
+#          git config user.email "silverbez@gmail.com"
+#          git config user.name "BezMan"
+#          git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/BezMan/Github-Actions
+#          git add .
+#          git commit -am "Automated report 2"
+#          git push
 
 
 
