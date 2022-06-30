@@ -23,7 +23,23 @@ jobs:
 #          name: lint.html
 #          path: app/build/reports/lint-results-debug.html
 
-  unit-test:
+  unit-test-before-no-cache:
+    #    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Run tests
+        run: ./gradlew testDebugUnitTest
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit_test_report
+          path: app/build/reports/tests/testDebugUnitTest/
+
+  unit-test-with-cache:
 #    needs: [lint]
     runs-on: ubuntu-latest
     steps:
@@ -81,7 +97,7 @@ jobs:
 #          name: app-apk.apk
 #          path: app/build/outputs/apk/debug/app-debug.apk
 
-  run_script_and_push_changes:
+  run_script:
 #    needs: [generate-apk]
     name: run script and push changes
     runs-on: ubuntu-latest
@@ -104,3 +120,20 @@ jobs:
 #          git add .
 #          git commit -am "Automated report 2"
 #          git push
+
+  unit-test-after:
+    #    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Run tests
+        run: ./gradlew testDebugUnitTest
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit_test_report
+          path: app/build/reports/tests/testDebugUnitTest/
+          cache: gradle
