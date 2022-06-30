@@ -8,59 +8,54 @@ on:
 
 jobs:
 
-#  lint:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout the code
-#        uses: actions/checkout@v3
-#
-#      - name: Run Lint
-#        run: ./gradlew lintDebug
-#
-#      - name: Upload html test report
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: lint.html
-#          path: app/build/reports/lint-results-debug.html
-
-
-  one-job-tests-and-script:
+  one-job-for-all:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
 
-      - name: Run test 1
+      - name: Run Lint
+        run: ./gradlew lintDebug
+
+      - name: Upload lint report
+        uses: actions/upload-artifact@v3
+        with:
+          name: lint.html
+          path: app/build/reports/lint-results-debug.html
+
+      - name: Run unit tests
         run: ./gradlew testDebugUnitTest
 
-      - name: Run test 2
-        run: ./gradlew testDebugUnitTest
+      - name: Upload unit test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit_test_report
+          path: app/build/reports/tests/testDebugUnitTest/
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-apk.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Run script file - unit tests
-        run: ./unitTest.sh
+        run: ./test.sh
         shell: bash
 
-        with:
-          cache: gradle
+      - name: Commit and Push changes
+        run: |
+          git config user.email "silverbez@gmail.com"
+          git config user.name "BezMan"
+          git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/BezMan/Github-Actions
+          git add .
+          git commit -am "Automated report 2"
+          git push
 
 
 
-#  unit-test-with-cache:
-##    needs: [lint]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout the code
-#        uses: actions/checkout@v3
-#
-#      - name: Run tests
-#        run: ./gradlew testDebugUnitTest
-#
-#      - name: Upload test report
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: unit_test_report
-#          path: app/build/reports/tests/testDebugUnitTest/
-#          cache: gradle
 
 #  instrumentation-test:
 ##    needs: [unit-test]
@@ -85,45 +80,3 @@ jobs:
 #        with:
 #          name: instrumentation_test_report
 #          path: app/build/reports/androidTests/connected/
-
-#  generate-apk:
-#    needs: [unit-test, instrumentation-test]
-#    name: Generate APK
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout the code
-#        uses: actions/checkout@v3
-#
-#      - name: Build debug APK
-#        run: ./gradlew assembleDebug --stacktrace
-#
-#      - name: Upload APK
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: app-apk.apk
-#          path: app/build/outputs/apk/debug/app-debug.apk
-
-#  run_script:
-##    needs: [generate-apk]
-#    needs: [unit-test-with-cache]
-#    name: run script and push changes
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Run script file - unit tests
-#        run: ./unitTest.sh
-#        shell: bash
-
-#      - uses: actions/checkout@v3
-#      - name: Run script file - instrumented tests
-#        run: ./instrumentedTest.sh
-#        shell: bash
-
-#      - name: Commit and Push changes
-#        run: |
-#          git config user.email "silverbez@gmail.com"
-#          git config user.name "BezMan"
-#          git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/BezMan/Github-Actions
-#          git add .
-#          git commit -am "Automated report 2"
-#          git push
