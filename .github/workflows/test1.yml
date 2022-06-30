@@ -40,6 +40,9 @@ jobs:
         run: ./unitTest.sh
         shell: bash
 
+        with:
+          cache: gradle
+
 
 
 #  unit-test-with-cache:
