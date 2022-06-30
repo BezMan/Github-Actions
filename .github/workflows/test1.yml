@@ -32,13 +32,9 @@ jobs:
 
       - name: Run test 1
         run: ./gradlew testDebugUnitTest
-        with:
-          cache: gradle
 
       - name: Run test 2
         run: ./gradlew testDebugUnitTest
-        with:
-          cache: gradle
 
       - name: Run script file - unit tests
         run: ./unitTest.sh
