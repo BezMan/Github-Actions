@@ -25,9 +25,10 @@ class ExampleUnitTest {
 //    }
 
     @Test
-    fun loop_1000() {
-        for (i in 1..1000) {
+    fun loop_20_sec() {
+        for (i in 1..20) {
             check_equal(i)
+            Thread.sleep(1000)
         }
     }
 
