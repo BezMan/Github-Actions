@@ -1,4 +1,4 @@
-name: CI Push
+name: 2023 CI Push
 on:
   push:
     branches: [ master ]
