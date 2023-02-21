@@ -4,3 +4,18 @@ on:
       version:
         description: 'Version to bump to'
         required: true
+
+jobs:
+
+  one-job-for-all:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Run Lint
+        run: ./gradlew lintDebug
+
+      - name: Run script file - run unit tests
+        run: ./unitTest.sh
+        shell: bash
