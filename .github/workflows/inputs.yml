@@ -3,6 +3,17 @@ name: 2023 CI Push
 on:
   push:
     branches: [ yml-branches ]
+
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: 'choose Flavor'
+        required: true
+        default: 'd'
+      play_store:
+        description: 'release to google play'
+        default: 'f'
+
 jobs:
 
   one-job-for-all:
